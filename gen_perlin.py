@@ -7,8 +7,8 @@ from multiprocessing import Pool, cpu_count
 # Parameters for noise generation
 octaves = 6  # More octaves increase detail
 persist = 0.5  # Persistence affects amplitude of octaves
-sizes = [8, 64, 128, 256]  # Image sizes
-num_images = 2000
+sizes = [64]  # Image sizes
+num_images = 5000
 
 def generate_perlin_noise_2d(shape, res, seed):
     gen = OpenSimplex(seed=seed)
@@ -33,7 +33,7 @@ def generate_image_perlin_grayscale(params):
     # Create directories if they do not exist
     folder_grayscale = f'perlin_grayscale/{size}x{size}'
     os.makedirs(folder_grayscale, exist_ok=True)
-    noise = generate_perlin_noise_2d((size, size), (np.random.uniform(50,150), np.random.uniform(50,150)), i)
+    noise = generate_perlin_noise_2d((size, size), (np.random.uniform(100,150), np.random.uniform(100,150)), i)
     im_gray = Image.fromarray(np.uint8(noise * 255), 'L')  # Convert to 8-bit pixel values
     im_gray.save(os.path.join(folder_grayscale, f'noise_{i}.png'))
 
@@ -44,9 +44,9 @@ def generate_image_perlin_rgb(params):
     os.makedirs(folder_rgb, exist_ok=True)
 
     # RGB (separate generation for red, green and blue channels)
-    noise_r = generate_perlin_noise_2d((size, size), (np.random.uniform(50,150), np.random.uniform(50,150)), i+1000)
-    noise_g = generate_perlin_noise_2d((size, size), (np.random.uniform(50,150), np.random.uniform(50,150)), i+2000)
-    noise_b = generate_perlin_noise_2d((size, size), (np.random.uniform(50,150), np.random.uniform(50,150)), i+3000)
+    noise_r = generate_perlin_noise_2d((size, size), (np.random.uniform(100,150), np.random.uniform(100,150)), i+1000)
+    noise_g = generate_perlin_noise_2d((size, size), (np.random.uniform(100,150), np.random.uniform(100,150)), i+2000)
+    noise_b = generate_perlin_noise_2d((size, size), (np.random.uniform(100,150), np.random.uniform(100,150)), i+3000)
     im_rgb = Image.merge("RGB", (Image.fromarray(np.uint8(noise_r * 255)), Image.fromarray(np.uint8(noise_g * 255)), Image.fromarray(np.uint8(noise_b * 255))))
     im_rgb.save(os.path.join(folder_rgb, f'noise_{i}.png'))
 
@@ -63,7 +63,7 @@ def generate_image_perlin_single_channel(params):
     im = np.zeros((size, size, 3), dtype=np.uint8)
 
     # Add noise to the selected color channel
-    noise = generate_perlin_noise_2d((size, size), (np.random.uniform(50,150), np.random.uniform(50,150)), i+1000*color_index)
+    noise = generate_perlin_noise_2d((size, size), (np.random.uniform(100,150), np.random.uniform(100,150)), i+1000*color_index)
     im[..., color_index] = np.uint8(noise * 255)
 
     # Save the image

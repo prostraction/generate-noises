@@ -5,8 +5,8 @@ import os
 from scipy.ndimage import gaussian_filter
 
 iterations = 5
-sizes = [8, 64, 128, 256]
-num_images = 2000
+sizes = [64]
+num_images = 5000
 
 def generate_wavelet_noise_image_grayscale(args):
     size, iterations = args
@@ -83,7 +83,7 @@ def generate_all_wavelet():
     args_rgb = [(size, i) for size in sizes for i in range(num_images)]
     with Pool(cpu_count()) as p:
         p.map(generate_image_wavelet_grayscale, args_grayscale)
-        p.map(generate_image_wavelet_single_channel, args_single_channel)
+        #p.map(generate_image_wavelet_single_channel, args_single_channel)
         p.map(generate_image_wavelet_rgb, args_rgb)
 
 if __name__ == '__main__':
